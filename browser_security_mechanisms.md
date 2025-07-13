@@ -4,27 +4,66 @@
 
 ### 1. OWASP Top 10 (2021)
 
+_Mitigations are provided for each risk._
+
 1. **Broken Access Control**
    - Example: A regular user accesses `/admin/delete-user/123` and successfully deletes another user.
+   - **Mitigations**:
+     - Enforce server-side access control checks
+     - Implement role-based access controls (RBAC)
+     - Use deny-by-default strategies
 2. **Cryptographic Failures**
    - Example: Passwords stored in plain text or weak hashing algorithms like MD5.
+   - **Mitigations**:
+     - Use modern, strong algorithms (e.g., AES-256, Argon2)
+     - Store passwords hashed with salts and secure hashing functions (e.g., bcrypt, scrypt)
 3. **Injection**
    - Example: SQL Injection via `login.php?user=' OR 1=1 --`.
+   - **Mitigations**:
+     - Use parameterized queries or ORM frameworks
+     - Sanitize and validate all user inputs
 4. **Insecure Design**
    - Example: A payment app does not limit failed login attempts, allowing brute force attacks.
+   - **Mitigations**:
+     - Perform threat modeling early in the SDLC
+     - Implement secure design patterns and principles
+     - Conduct regular design and architecture reviews
 5. **Security Misconfiguration**
    - Example: Open admin console on default port with no password.
+   - **Mitigations**:
+     - Harden server configurations
+     - Disable unused features and services
+     - Use security headers and patch regularly
 6. **Vulnerable and Outdated Components**
    - Example: A web app using an outdated jQuery version with known XSS vulnerabilities.
+   - **Mitigations**:
+     - Track and update dependencies
+     - Use tools like OWASP Dependency-Check, Snyk, or Trivy
+     - Remove unused libraries
 7. **Identification and Authentication Failures**
    - Example: No session timeout after inactivity, exposing risk on public devices.
+   - **Mitigations**:
+     - Enforce MFA (Multi-Factor Authentication)
+     - Use secure session management (timeouts, regeneration)
+     - Implement account lockout on failed attempts
 8. **Software and Data Integrity Failures**
    - Example: CI/CD pipeline runs unsigned code from untrusted repositories.
+   - **Mitigations**:
+     - Sign and verify code artifacts
+     - Secure CI/CD configurations
+     - Use trusted sources and validated dependencies
 9. **Security Logging and Monitoring Failures**
    - Example: No logging of failed login attempts or alerting on suspicious access patterns.
+   - **Mitigations**:
+     - Enable centralized logging and log analysis
+     - Set up alerts for critical events
+     - Ensure logs are protected and retained
 10. **Server-Side Request Forgery (SSRF)**
-
-- Example: Image upload feature allows URLs like `http://localhost:8000/admin`, leaking internal data.
+   - Example: Image upload feature allows URLs like `http://localhost:8000/admin`, leaking internal data.
+   - **Mitigations**:
+     - Block internal IP address ranges
+     - Whitelist allowed domains
+     - Validate and sanitize all user-provided URLs
 
 ---
 
@@ -181,6 +220,17 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 ---
 
 ### 9. APIs (Application Programming Interfaces)
+
+**Common REST API Methods**:
+| Method | Description                            | Example Use Case                     |
+|--------|----------------------------------------|--------------------------------------|
+| GET    | Retrieve data                          | `GET /api/users` (list users)        |
+| POST   | Create a new resource                  | `POST /api/users` (create user)      |
+| PUT    | Update entire resource                 | `PUT /api/users/123` (update user)   |
+| PATCH  | Partially update resource              | `PATCH /api/users/123` (change email)|
+| DELETE | Remove a resource                      | `DELETE /api/users/123` (delete user)|
+
+
 
 **Definition**: APIs are a set of rules and protocols that allow different software systems to communicate with each other. In web applications, they typically expose services over HTTP or HTTPS.
 

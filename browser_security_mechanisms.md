@@ -4,7 +4,7 @@
 
 ### 1. OWASP Top 10 (2021)
 
-_Mitigations are provided for each risk._
+*Mitigations are provided for each risk.*
 
 1. **Broken Access Control**
    - Example: A regular user accesses `/admin/delete-user/123` and successfully deletes another user.
@@ -59,11 +59,12 @@ _Mitigations are provided for each risk._
      - Set up alerts for critical events
      - Ensure logs are protected and retained
 10. **Server-Side Request Forgery (SSRF)**
-   - Example: Image upload feature allows URLs like `http://localhost:8000/admin`, leaking internal data.
-   - **Mitigations**:
-     - Block internal IP address ranges
-     - Whitelist allowed domains
-     - Validate and sanitize all user-provided URLs
+
+- Example: Image upload feature allows URLs like `http://localhost:8000/admin`, leaking internal data.
+- **Mitigations**:
+  - Block internal IP address ranges
+  - Whitelist allowed domains
+  - Validate and sanitize all user-provided URLs
 
 ---
 
@@ -222,13 +223,14 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 ### 9. APIs (Application Programming Interfaces)
 
 **Common REST API Methods**:
-| Method | Description                            | Example Use Case                     |
-|--------|----------------------------------------|--------------------------------------|
-| GET    | Retrieve data                          | `GET /api/users` (list users)        |
-| POST   | Create a new resource                  | `POST /api/users` (create user)      |
-| PUT    | Update entire resource                 | `PUT /api/users/123` (update user)   |
-| PATCH  | Partially update resource              | `PATCH /api/users/123` (change email)|
-| DELETE | Remove a resource                      | `DELETE /api/users/123` (delete user)|
+
+| Method | Description               | Example Use Case                      |
+| ------ | ------------------------- | ------------------------------------- |
+| GET    | Retrieve data             | `GET /api/users` (list users)         |
+| POST   | Create a new resource     | `POST /api/users` (create user)       |
+| PUT    | Update entire resource    | `PUT /api/users/123` (update user)    |
+| PATCH  | Partially update resource | `PATCH /api/users/123` (change email) |
+| DELETE | Remove a resource         | `DELETE /api/users/123` (delete user) |
 
 
 
@@ -424,7 +426,100 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 ---
 
-### 17. Other Security Headers
+### 17. CI/CD Project Tool Summary
+
+**CI/CD Tool-to-OWASP Top 10 Mapping Chart**:
+
+| Tool                 | Purpose                                  | Mapped OWASP Category                           |
+| -------------------- | ---------------------------------------- | ----------------------------------------------- |
+| **OWASP ZAP**        | DAST for runtime vulnerability detection | A03: Injection, A05: Security Misconfiguration  |
+| **Bandit**           | Python static code analysis              | A03: Injection, A10: SSRF                       |
+| **Safety**           | Scan for vulnerable Python packages      | A06: Vulnerable Components                      |
+| **Flake8**           | Code linting (Python)                    | A04: Insecure Design                            |
+| **Gitleaks**         | Detect hardcoded secrets                 | A02: Cryptographic Failures, A07: Auth Failures |
+| **Trivy**            | Container and IaC vulnerability scanning | A06: Vulnerable Components                      |
+| **Semgrep**          | Custom static code analysis              | A01: Broken Access Control, A10: SSRF           |
+| **Snyk**             | Dependency scanning and remediation      | A06: Vulnerable Components                      |
+| **GitHub Secrets**   | Secure credential storage                | A02: Crypto Failures, A07: Auth Failures        |
+| **Fly.io**           | Secure cloud deployment                  | A08: Software/Data Integrity Failures           |
+| **Fail2Ban + Wazuh** | Runtime intrusion detection and alerting | A09: Logging & Monitoring Failures              |
+
+
+
+In my personal DevSecOps project using GitHub Actions, the following tools and configurations were integrated into the CI/CD pipeline:
+
+**Security Scanning Tools:**
+
+- **OWASP ZAP (Docker)** – Automated DAST scans to detect issues like XSS, SQLi (OWASP A03, A05)
+- **Snyk** – Dependency vulnerability scanning (OWASP A06)
+- **Trivy** – Container and IaC scanning (OWASP A06, A05)
+- **Semgrep** – Static code analysis (OWASP A01, A03, A10)
+
+**Linting and Quality Tools:**
+
+- **ESLint** – JavaScript/TypeScript code analysis (OWASP A04, A10)
+- **Bandit** – Python security linter (OWASP A03, A10)
+
+**CI/CD Practices:**
+
+- GitHub **Secrets** for credentials and tokens (OWASP A02, A07)
+- Minimal **workflow token permissions** (least privilege) (OWASP A01, A05)
+- Enforced **branch protection rules** for reviewed and tested code (OWASP A08)
+- Used **signed commits** to ensure source integrity (OWASP A08)
+
+## **Other Integrations:**
+
+- GitHub Actions triggered **Fly.io deployments** of secure, containerized applications
+
+**Sample GitHub Actions Snippet:**
+
+```yaml
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@v0.11.2
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+      - name: Run OWASP ZAP Full Scan
+        run: docker run -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable zap-full-scan.py -t http://localhost:3000
+```
+
+In my personal DevSecOps project using GitHub Actions, the following tools and configurations were integrated into the CI/CD pipeline:
+
+**Security Scanning Tools:**
+
+- **OWASP ZAP (Docker)** – automated DAST scans
+- **Snyk** – dependency vulnerability scanning
+- **Trivy** – container and code scanning
+- **Semgrep** – static analysis of code for security issues
+
+**Linting and Quality Tools:**
+
+- **ESLint** – JavaScript/TypeScript code style and error detection
+- **Bandit** – Python security linter
+
+**CI/CD Practices:**
+
+- GitHub **Secrets** used to securely store tokens and keys
+- Restricted **workflow token permissions** (`read`/`write` as needed)
+- Enabled **branch protection rules** to enforce review and pipeline checks
+- **Signed commits** and checks for tamper resistance
+
+**Other Integrations:**
+
+- **Fail2Ban and Wazuh** for runtime intrusion detection
+- GitHub Actions used to trigger **deployment workflows** to Fly.io with containerized apps
+
+---
+
+### 18. Other Security Headers
 
 - `X-Frame-Options`: Prevents clickjacking (e.g., `DENY`, `SAMEORIGIN`).
 - `Referrer-Policy`: Controls `Referer` header sent with requests.

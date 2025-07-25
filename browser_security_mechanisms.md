@@ -91,7 +91,10 @@
 
 - **Level 1 (L1)**: Basic security for all applications.
 - **Level 2 (L2)**: Enhanced security for applications processing sensitive data.
-- **Level 3 (L3)**: Advanced security for critical systems requiring the highest assurance. ASVS covers areas such as authentication, access control, cryptography, input validation, and error handling, making it ideal for integrating security into the software development lifecycle (SDLC).
+- **Level 3 (L3)**: Advanced security for critical systems requiring the highest assurance.
+
+- ASVS covers areas such as authentication, access control, cryptography, input validation, and error handling, making it ideal for integrating security into the software development lifecycle (SDLC).
+
 - Use during design, development, and testing.
 
 **OWASP Testing Guide**: Step-by-step manual for security testing (e.g., SQLi, XSS, auth bypass).
